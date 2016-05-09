@@ -221,8 +221,8 @@ public class Tests {
         em.getTransaction().begin();
         acc2 = em.merge(acc);
         assertFalse(em.contains(acc)); //  acc is gemerged waardoor die niet meer in de entity manager bestaat
-        assertTrue(em.contains(acc2)); // Door de merge bestaat accw in de entity manager
-        assertNotSame(acc, acc2);  // acc is het orgineel en acc2 is een copy waardoor ze niet helemaal hetzelfde zijn.
+        assertTrue(em.contains(acc2)); // Door de merge bestaat acc2 wel in de entity manager
+        assertNotSame(acc, acc2);  // acc is het orgineel en acc2 is de terug gegeven waarde waardoor ze niet helemaal hetzelfde zijn.
         acc2.setBalance(balance3b);
         acc.setBalance(balance3c);
         em.getTransaction().commit();
@@ -252,12 +252,12 @@ public class Tests {
         account2.setId(account.getId());
         em.getTransaction().begin();
         account2 = em.merge(account2);
-        assertSame(account, account2);  //verklaar
+        assertSame(account, account2);  //
         assertTrue(em.contains(account2));  //De transactions zijn nog niet gecommit en dus bestaat account2 nog in de entity manager
         assertFalse(em.contains(tweedeAccountObject));  //Door de merge bestaat tweedeAccountObject niet meer in de entity manager
         tweedeAccountObject.setBalance(850l);
-        assertEquals((Long) 650L, account.getBalance());  //account en account2 zijn hetzelfde
-        assertEquals((Long) 650L, account2.getBalance());  //account en account2 zijn hetzelfde
+        assertEquals((Long) 650L, account.getBalance());  //account en account2 zijn hetzelfde en op regel 250 is de balance gezet naar 650L
+        assertEquals((Long) 650L, account2.getBalance());  //account en account2 zijn hetzelfde en op regel 250 is de balance gezet naar 650L
         em.getTransaction().commit();
         em.close();
 
